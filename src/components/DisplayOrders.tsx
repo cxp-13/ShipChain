@@ -10,7 +10,7 @@ const DisplayOrders = ({ orders }: { orders: Array<Order> }) => {
 
     // 传递参数：orderId + userId(clerk提供) 
     const handleNavigate = (order: Order) => {
-        router.push(`/orders?orderId=${order.orderId}&userId=${userId}`)
+        router.push(`/orders/${order.orderId}/userId=${userId}`)
     }
 
 
@@ -19,7 +19,7 @@ const DisplayOrders = ({ orders }: { orders: Array<Order> }) => {
             <div className='flex flex-wrap mt-[20px] gap-[26px]'>
                 {
                     orders.length === 0 ? (
-                        <p className='font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]'>
+                        <p className='font-epilogue font-semibold text-[14px] leading-[30px] text-primary'>
                             You have not publish any order yet.
                         </p>
                     ) : (

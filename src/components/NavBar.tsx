@@ -6,6 +6,11 @@ import { logo, menu, search, thirdweb } from '../../public/assets'
 import { navlinks } from '../constants'
 import Image from 'next/image'
 import { ConnectWallet } from "@thirdweb-dev/react";
+import { Button } from '@nextui-org/button';
+import { Input } from "@nextui-org/react";
+import { RxMagnifyingGlass } from "react-icons/rx";
+import useThemeStore from "@/store/ThemeStore";
+
 
 
 // import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
@@ -22,6 +27,8 @@ const NavBar = () => {
   const router = useRouter()
   const [isActive, setIsActive] = useState('dashboard')
   const [toggleDrawer, setToggleDrawer] = useState(false)
+  const { themes, activeTheme, setTheme } = useThemeStore((state) => state);
+
 
   // const connectWallet = async() => {
   //   try {
@@ -34,19 +41,32 @@ const NavBar = () => {
   //   }
   // }
 
-
-
   return (
-    <div className='flex items-center sm:flex-row  w-full  justify-between flex-col-reverse gap-3 mb-10'>
-      <div className='max-sm:w-full sm:w-72 h-[52px] flex flex-row justify-center items-center p-2 rounded-full  bg-[#1c1c24]'>
+    <div className='flex items-center sm:flex-row  w-full  justify-between flex-col-reverse gap-3 mb-10 '>
+      {/* <div className='max-sm:w-full sm:w-72 h-[52px] flex flex-row justify-center items-center p-2 rounded-full  bg-[#1c1c24]'>
         <input type="text" className='ps-2 outline-none border-none rounded-full  flex-1  bg-transparent placeholder:text-gray-600' placeholder='Search for campaigns' />
         <div className=' rounded-full bg-green-600  w-full h-full flex justify-center items-center'>
           <Image src={search} alt="search" width={15} height={15} />
         </div>
+      </div> */}
+
+      <div className="flex w-60 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <Input
+          type="search"
+          placeholder="Search for campaigns"
+          labelPlacement="none"
+          size="lg"
+          endContent={
+            // <Image src={search} alt="search" width={15} height={15} />
+            <RxMagnifyingGlass color={`${activeTheme}`} className='size-4'/>
+          }
+        />
       </div>
+
       <div className='flex max-sm:hidden  gap-5 justify-center items-center'>
         <ConnectWallet />
-        <button className="btn btn-primary">Log in</button>
+        {/* <button className="btn btn-primary">Log in</button> */}
+        <Button>Log in</Button>
       </div>
       {/* small screen navigation */}
       <div className='flex justify-between items-center sm:hidden w-full relative'>

@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.theme-light {
+  --color-primary: 255 190 152;
+  --color-secondary: 254 236 226;
+  --color-background: 247 222 208;
+  --color-foreground: 226 191 179;
+  --color-separator: 76 86 106;
+}
+
+.theme-dark {
+  --color-primary: 7 15 43;
+  --color-secondary: 27 26 85;
+  --color-background: 83 92 145;
+  --color-foreground: 146 144 195;
+  --color-separator: 131 148 150;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,7 +33,7 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--color-primary));
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
@@ -35,6 +51,6 @@ body {
   }
 
   .order-card {
-    @apply w-48 h-auto shadow-xl rounded-xl flex flex-col bg-white;
+    @apply w-48 h-auto shadow-xl rounded-xl flex flex-col bg-foreground text-content1;
   }
 }

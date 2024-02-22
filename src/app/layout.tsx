@@ -9,8 +9,10 @@ import {
   coinbaseWallet,
   walletConnect,
 } from "@thirdweb-dev/react";
+import useThemeStore from "@/store/ThemeStore";
+import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -22,29 +24,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const { themes, activeTheme, setTheme } = useThemeStore((state) => state);
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThirdwebProvider
-          supportedWallets={[
-            metamaskWallet({
-              recommended: true,
-            }),
-            coinbaseWallet(),
-            walletConnect(),
-          ]}
-          clientId="<your_client_id>"
-        >
-          <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
-            <div className="sm:flex hidden mr-10 relative">
-              <Sidebar />
+    <html lang="en" className={`${activeTheme} `}>
+      {/* <body className={`theme-${activeTheme}`}> */}
+      <body className="bg-background">
+        <Providers>
+          <ThirdwebProvider
+            supportedWallets={[
+              metamaskWallet({
+                recommended: true,
+              }),
+              coinbaseWallet(),
+              walletConnect(),
+            ]}
+            clientId="<your_client_id>"
+          >
+            <div className="relative sm:-8 p-4 min-h-screen flex flex-row">
+              <div className="sm:flex hidden mr-10 relative">
+                <Sidebar />
+              </div>
+              <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
+                <Navbar />
+                {children}
+              </div>
             </div>
-            <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
-              <Navbar />
-              {children}
-            </div>
-          </div>
-        </ThirdwebProvider>
+          </ThirdwebProvider>
+        </Providers>
       </body>
     </html>
   );
