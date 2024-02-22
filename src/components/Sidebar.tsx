@@ -41,8 +41,6 @@ const Sidebar = () => {
     return (
         <div className={`flex flex-col sticky top-5 justify-between items-center h-[93vh]`}>
             <Link href="/">
-                {/* <Icon styles="w-[52px] h-[52px]" imgUrl={logo} selectLink={selectLink} /> */}
-
                 <div className={`w-[48px] h-[48px] rounded-[10px] flex justify-center items-center `}>
                     <RiTakeawayLine color={`${activeTheme}`} className='size-10' />
                 </div>
@@ -50,19 +48,7 @@ const Sidebar = () => {
 
             <div className='flex-1 flex flex-col justify-between items-center rounded-[20px] w-[76px] py-4 mt-12 bg-default-50' >
                 <div className='flex flex-col justify-center items-center gap-3'>
-                    {/* {
-                        navlinks.map((link, index) => (
-                            <Icon key={index} {...link} selectLink={selectLink}
-                                handleClick={() => {
-                                    if (link.isEnable) {
-                                        setSelectLink(link.name)
-                                        router.push(link.link)
-                                    }
-                                }}
-                            />
-                        ))
-                    } */}
-
+            
                     <div className={`w-[48px] h-[48px] rounded-[10px] ${selectLink === "dashboard" && 'bg-primary'} bg-default flex justify-center items-center `}
                         onClick={() => {
                             setSelectLink('dashboard');

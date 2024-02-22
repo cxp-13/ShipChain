@@ -10,6 +10,14 @@ import { Button } from '@nextui-org/button';
 import { Input } from "@nextui-org/react";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import useThemeStore from "@/store/ThemeStore";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { RxDashboard } from "react-icons/rx";
+import { RxPlusCircled } from "react-icons/rx";
+import { RxRocket } from "react-icons/rx";
+import { RxPerson } from "react-icons/rx";
+import { RiTakeawayLine } from "react-icons/ri";
+import { RxSun } from "react-icons/rx";
+import { RxQuestionMark } from "react-icons/rx";
 
 
 
@@ -25,7 +33,7 @@ const NavBar = () => {
   // const address = useAddress()
 
   const router = useRouter()
-  const [isActive, setIsActive] = useState('dashboard')
+  const [selectLink, setSelectLink] = useState('dashboard')
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const { themes, activeTheme, setTheme } = useThemeStore((state) => state);
 
@@ -43,74 +51,96 @@ const NavBar = () => {
 
   return (
     <div className='flex items-center sm:flex-row  w-full  justify-between flex-col-reverse gap-3 mb-10 '>
-      {/* <div className='max-sm:w-full sm:w-72 h-[52px] flex flex-row justify-center items-center p-2 rounded-full  bg-[#1c1c24]'>
-        <input type="text" className='ps-2 outline-none border-none rounded-full  flex-1  bg-transparent placeholder:text-gray-600' placeholder='Search for campaigns' />
-        <div className=' rounded-full bg-green-600  w-full h-full flex justify-center items-center'>
-          <Image src={search} alt="search" width={15} height={15} />
-        </div>
-      </div> */}
-
-      <div className="flex w-60 flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-60 flex-wrap md:flex-nowrap mb-3 md:mb-0 gap-4 max-sm:w-full">
         <Input
           type="search"
           placeholder="Search for campaigns"
           labelPlacement="none"
           size="lg"
           endContent={
-            // <Image src={search} alt="search" width={15} height={15} />
-            <RxMagnifyingGlass color={`${activeTheme}`} className='size-4'/>
+            <RxMagnifyingGlass color={`${activeTheme}`} className='size-4' />
           }
         />
       </div>
 
       <div className='flex max-sm:hidden  gap-5 justify-center items-center'>
         <ConnectWallet />
-        {/* <button className="btn btn-primary">Log in</button> */}
         <Button>Log in</Button>
       </div>
+
       {/* small screen navigation */}
-      <div className='flex justify-between items-center sm:hidden w-full relative'>
-        <img src={menu}
-          alt="menu"
-          className='object-contain w-[25px] h-[25px] cursor-pointer'
-          onClick={() => setToggleDrawer((pre) => !pre)}
-        />
-
-        <div className={`absolute top-[60px] left-0 right-0 bg-[#1c1c24] z-10 py-5 transition-all duration-700
-        shadow-secondary ${toggleDrawer ? 'translate-y-0' : '-translate-y-[100vh]'}`}>
-          <ul className='mb-4'>
-            {
-              navlinks.map((link) => (
-                <li
-                  key={link.name}
-                  className={`flex p-4 ${isActive == link.name && 'bg-[#3a3a43]'}`}
-                  onClick={() => {
-                    setIsActive(link.name)
-                    setToggleDrawer(false)
-                    router.push(link.link)
-                  }}>
-
-                  <img
-                    src={link.imgUrl}
-                    alt={link.name}
-                    className={`w-[24px] h-[24px] object-contain ${isActive === link.name ? 'grayscale-0' : 'grayscale'}`}
-                  />
-                  <p className={`ml-[20px] font-epilogue 
-                  font-semibold text-[14px] 
-                  ${isActive === link.name ? 'text-[#1dc071]' : 'text-[#808191]'}`}>
-                    {link.name}
-                  </p>
-                </li>
-              ))
+      <div className='flex flex-col justify-between items-center sm:hidden w-full relative'>
+        <div className='flex w-full justify-between items-center'>
+          <RxHamburgerMenu className='object-contain w-[25px] h-[25px] cursor-pointer' color={`${activeTheme}`} onClick={() => setToggleDrawer((pre) => !pre)} />
+          <Link href="/" className='flex gap-3 justify-center items-center'>
+            <RiTakeawayLine color={`${activeTheme}`} className='size-10' />
+            <h4 className='font-extrabold text-xl font-mono text-foreground '>ShipChain</h4>
+          </Link>
+          <div className='p-3 rounded-full flex justify-center items-center drop-shadow-2xl bg-default' onClick={() => {
+            if (activeTheme === themes[0]) {
+              console.log(activeTheme);
+              setTheme(themes[1])
+            } else {
+              setTheme(themes[0])
             }
-
-          </ul>
-
-          <div className='flex mx-4'>
-
-            <button className="btn btn-primary">Connect</button>
+          }}>
+            <RxSun />
           </div>
+        </div>
+        <div className={`absolute top-[60px] left-0 right-0 z-20 py-2 transition-all duration-700 bg-content4 rounded-lg
+        shadow-secondary ${toggleDrawer ? 'translate-y-0' : '-translate-y-[100vh]'}`}>
+          <div className='flex flex-col gap-3'>
+            <div className={`w-full h-[48px] rounded-[10px] ${selectLink === "dashboard" && 'bg-primary'} bg-default flex justify-center items-center gap-3`}
+              onClick={() => {
+                setSelectLink('dashboard');
+                router.push('/');
+              }} >
+              <RxDashboard color={`${activeTheme}`} />
+              <p className='text-content1 font-mono'>仪表板</p>
+            </div>
 
+            <div className={`w-full h-[48px] rounded-[10px] ${selectLink === "publish" && 'bg-primary'} bg-default flex justify-center items-center gap-3`}
+              onClick={() => {
+                setSelectLink('publish');
+                router.push('/orders/store');
+              }} >
+              <RxPlusCircled color={`${activeTheme}`} />
+              <p className='text-content1 font-mono'>发布</p>
+            </div>
+
+            <div className={`w-full h-[48px] rounded-[10px] ${selectLink === "rocket" && 'bg-primary'} bg-default flex justify-center items-center gap-3`}
+              onClick={() => {
+                setSelectLink('rocket');
+                router.push('/rocket');
+              }} >
+              <RxRocket color={`${activeTheme}`} />
+              <p className='text-content1 font-mono'>时区增强</p>
+
+            </div>
+
+            <div className={`w-full h-[48px] rounded-[10px] ${selectLink === "profile" && 'bg-primary'} bg-default flex justify-center items-center gap-3`}
+              onClick={() => {
+                setSelectLink('profile');
+                router.push('/profile');
+              }} >
+              <RxPerson color={`${activeTheme}`} />
+              <p className='text-content1 font-mono'>个人</p>
+
+            </div>
+
+            <div className={`w-full h-[48px] rounded-[10px] ${selectLink === "question" && 'bg-primary'} bg-default flex justify-center items-center gap-3`}
+              onClick={() => {
+                setSelectLink('question');
+                router.push('/question');
+              }} >
+              <RxQuestionMark color={`${activeTheme}`} />
+              <p className='text-content1 font-mono'>Q&A</p>
+
+            </div>
+            <ConnectWallet className='rounded-[10px] font-mono' />
+
+
+          </div>
         </div>
       </div>
     </div>

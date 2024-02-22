@@ -37,7 +37,7 @@ const OrderCard = ({ order, handleClick }: { order: Order, handleClick: () => vo
         <Card
             isFooterBlurred
             radius="lg"
-            className="border-none w-[300px]"
+            className="border-none w-[300px] max-sm:w-full"
         >
             <CardHeader className="flex gap-3">
                 <Image
