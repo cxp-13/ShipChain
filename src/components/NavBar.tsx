@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { logo, menu, search, thirdweb } from '../../public/assets'
 import { navlinks } from '../constants'
 import Image from 'next/image'
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 
 // import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
@@ -38,14 +39,14 @@ const NavBar = () => {
   return (
     <div className='flex items-center sm:flex-row  w-full  justify-between flex-col-reverse gap-3 mb-10'>
       <div className='max-sm:w-full sm:w-72 h-[52px] flex flex-row justify-center items-center p-2 rounded-full  bg-[#1c1c24]'>
-        <input type="text" className=' outline-none border-none rounded-full  flex-1  bg-transparent placeholder:text-gray-600' placeholder='Search for campaigns' />
+        <input type="text" className='ps-2 outline-none border-none rounded-full  flex-1  bg-transparent placeholder:text-gray-600' placeholder='Search for campaigns' />
         <div className=' rounded-full bg-green-600  w-full h-full flex justify-center items-center'>
-          <Image src={search} alt="search"   width={15} height={15}  />
+          <Image src={search} alt="search" width={15} height={15} />
         </div>
       </div>
       <div className='flex max-sm:hidden  gap-5 justify-center items-center'>
-        {/* <ConnectWallet btnTitle="Sign in" />; */}
-        <button className="btn btn-primary">Connect</button>
+        <ConnectWallet />
+        <button className="btn btn-primary">Log in</button>
       </div>
       {/* small screen navigation */}
       <div className='flex justify-between items-center sm:hidden w-full relative'>
@@ -87,7 +88,7 @@ const NavBar = () => {
 
           <div className='flex mx-4'>
 
-          <button className="btn btn-primary">Connect</button>
+            <button className="btn btn-primary">Connect</button>
           </div>
 
         </div>

@@ -3,6 +3,12 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar, Navbar } from "@/components"
+import {
+  ThirdwebProvider,
+  metamaskWallet,
+  coinbaseWallet,
+  walletConnect,
+} from "@thirdweb-dev/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,15 +25,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
-          <div className="sm:flex hidden mr-10 relative">
-            <Sidebar />
+        <ThirdwebProvider
+          supportedWallets={[
+            metamaskWallet({
+              recommended: true,
+            }),
+            coinbaseWallet(),
+            walletConnect(),
+          ]}
+          clientId="<your_client_id>"
+        >
+          <div className="relative sm:-8 p-4 bg-[#13131a] min-h-screen flex flex-row">
+            <div className="sm:flex hidden mr-10 relative">
+              <Sidebar />
+            </div>
+            <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
+              <Navbar />
+              {children}
+            </div>
           </div>
-          <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
-            <Navbar />
-            {children}
-          </div>
-        </div>
+        </ThirdwebProvider>
       </body>
     </html>
   );

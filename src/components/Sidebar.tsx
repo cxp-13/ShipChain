@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logo, sun } from '../../public/assets'
@@ -10,14 +11,14 @@ type IconProps = {
     name?: string;
     imgUrl: string;
     selectLink: string;
-    disabled?: boolean;
+    isEnable?: boolean;
     handleClick?: () => void;
 }
 
 
-const Icon = ({ styles, name, imgUrl, selectLink, handleClick }: IconProps) => (
+const Icon = ({ styles, name, imgUrl, selectLink, isEnable, handleClick }: IconProps) => (
     <div className={`w-[48px] h-[48px] rounded-[10px] ${selectLink && selectLink === name && 'bg-[#2c2f32]'}
-    flex justify-center items-center  ${styles} `} onClick={handleClick}>
+    flex justify-center items-center  ${styles} ${!isEnable && 'cursor-not-allowed'} `} onClick={handleClick} >
         <Image src={imgUrl} alt="fund_logo" className={`w-1/2 h-1/2 ${selectLink !== name && 'grayscale'}`} />
     </div>
 )
@@ -25,7 +26,7 @@ const Icon = ({ styles, name, imgUrl, selectLink, handleClick }: IconProps) => (
 
 const Sidebar = () => {
     const router = useRouter()
-    const [selectLink, setSelectLink] = React.useState("dashboard")
+    const [selectLink, setSelectLink] = useState("dashboard")
 
 
     return (
@@ -40,8 +41,11 @@ const Sidebar = () => {
                         navlinks.map((link, index) => (
                             <Icon key={index} {...link} selectLink={selectLink}
                                 handleClick={() => {
-                                    setSelectLink(link.name)
-                                    router.push(link.link)
+                                    if (link.isEnable) {
+                                        setSelectLink(link.name)
+                                        router.push(link.link)
+                                    }
+
                                 }}
                             />
                         ))
