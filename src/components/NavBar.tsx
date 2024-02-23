@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logo, menu, search, thirdweb } from '../../public/assets'
-import { navlinks } from '../constants'
+import { navlinks } from '../constants/NavLinks'
 import Image from 'next/image'
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { Button } from '@nextui-org/button';
@@ -26,6 +26,7 @@ import {
   UserButton,
   useUser
 } from "@clerk/nextjs";
+import { SignInWithMetamaskButton } from "@clerk/nextjs";
 
 
 
@@ -75,7 +76,15 @@ const NavBar = () => {
 
 
       <div className='flex max-sm:hidden  gap-5 justify-center items-center'>
-        <ConnectWallet />
+        {/* 连接钱包(展示不可行，连接后Clerk的账户中Wallet并未更新) */}
+        {/* <div>
+          <SignInWithMetamaskButton mode="modal">
+            <button>
+              Sign in
+            </button>
+          </SignInWithMetamaskButton>
+        </div> */}
+        {/* <ConnectWallet /> */}
         {/* 如果当前已登录 */}
         <SignedIn>
           <UserButton />
