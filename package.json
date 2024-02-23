@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.29.7",
     "@nextui-org/react": "^2.2.9",
     "@thirdweb-dev/react": "^4.4.8",
     "@thirdweb-dev/sdk": "^4.0.35",

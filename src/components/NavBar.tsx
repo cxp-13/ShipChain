@@ -18,6 +18,14 @@ import { RxPerson } from "react-icons/rx";
 import { RiTakeawayLine } from "react-icons/ri";
 import { RxSun } from "react-icons/rx";
 import { RxQuestionMark } from "react-icons/rx";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser
+} from "@clerk/nextjs";
 
 
 
@@ -36,6 +44,8 @@ const NavBar = () => {
   const [selectLink, setSelectLink] = useState('dashboard')
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const { themes, activeTheme, setTheme } = useThemeStore((state) => state);
+  const { user } = useUser();
+  const primaryWeb3Wallet = user?.primaryWeb3Wallet;
 
 
   // const connectWallet = async() => {
@@ -63,9 +73,24 @@ const NavBar = () => {
         />
       </div>
 
+
       <div className='flex max-sm:hidden  gap-5 justify-center items-center'>
         <ConnectWallet />
-        <Button>Log in</Button>
+        {/* 如果当前已登录 */}
+        <SignedIn>
+          <UserButton />
+          <p>
+            {primaryWeb3Wallet ? primaryWeb3Wallet.web3Wallet : "Not found"}
+          </p>
+        </SignedIn>
+        {/* 如果未登录 */}
+        <SignedOut>
+          <SignInButton >
+            <Button>
+              登录
+            </Button>
+          </SignInButton>
+        </SignedOut>
       </div>
 
       {/* small screen navigation */}
