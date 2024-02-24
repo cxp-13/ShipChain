@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Table,
@@ -23,24 +24,35 @@ import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { SearchIcon } from "./SearchIcon";
-import { columns, users, statusOptions } from "@/constants/OrderTableData";
+// import { columns, users, statusOptions } from "@/constants/OrderTableData";
+import { columns, orders, statusOptions, users, web3WalletAddresses } from "@/constants/DataMock"
 import { capitalize } from "@/utils/index";
+import { Order, OrderPopulateMeal } from "@/lib/database/models/order";
+import { Meal } from "@/lib/database/models/meal";
+import { User as UserType } from "@/lib/database/models/user";
 
+// 订单状态
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+  success: "success",
+  fail: "danger",
+  loading: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["user", "id", "createAt", "amount", "status"];
 
-type User = typeof users[0];
+// type User = typeof users[0];
+
 
 const OrderTable = () => {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
+
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
+
+  const [selectWallet, setSelectWallet] = React.useState<Selection>("all");
+
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "age",
@@ -56,26 +68,30 @@ const OrderTable = () => {
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
   }, [visibleColumns]);
-
+  // 过滤订单展示
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
-
+    let filteredOrders = [...orders];
+    // 搜索框
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredOrders = filteredOrders.filter((order) =>
+        order.meals.some(meal => meal.name.includes(filterValue))
       );
     }
+    // 选择需要展示的字段
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      // 根据当前用户选择的状态数组里面，来判断order的状态有没有
+      filteredOrders = filteredOrders.filter((order) =>
+        Array.from(statusFilter).includes(order.status)
       );
     }
+    // 选择需要展示的钱包
+    filteredOrders = filteredOrders.filter((order) => Array.from(selectWallet).includes(order.owner));
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredOrders;
+  }, [orders, filterValue, statusFilter, selectWallet]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
+  // 最后一页
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -84,41 +100,57 @@ const OrderTable = () => {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: OrderPopulateMeal, b: OrderPopulateMeal) => {
+      const first = a[sortDescriptor.column as keyof OrderPopulateMeal] as number;
+      const second = b[sortDescriptor.column as keyof OrderPopulateMeal] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
+  // 每个属性对应渲染的DOM
+  const renderCell = React.useCallback((order: OrderPopulateMeal, columnKey: React.Key) => {
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+
+    const cellValue = order[columnKey as keyof OrderPopulateMeal];
 
     switch (columnKey) {
-      case "name":
+      case "user":
         return (
           <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
+            avatarProps={{ radius: "lg", src: order.user.avatar }}
+            description={order.user.email}
+            name={cellValue.name}
+          />
         );
-      case "role":
+      case "meals":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
+          <div>
+            {cellValue.map((meal) =>
+              <Chip>
+                {meal.name}
+              </Chip>
+            )}
           </div>
+        );
+      case "id":
+        return (
+          <p className="text-bold text-small">{cellValue}</p>
+        );
+      case "createAt":
+        return (
+          <p className="text-bold text-small">{cellValue}</p>
+        );
+      case "amount":
+        return (
+          <p className="text-bold text-small">{cellValue}</p>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+          <Chip className="capitalize" color={statusColorMap[cellValue]} size="sm" variant="flat">
             {cellValue}
           </Chip>
+
         );
       case "actions":
         return (
@@ -229,9 +261,28 @@ const OrderTable = () => {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
-            </Button>
+            {/* 查看不同钱包 */}
+            <Dropdown>
+              <DropdownTrigger className="hidden sm:flex">
+                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                  Address
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label="Table Columns"
+                closeOnSelect={false}
+                selectionMode="multiple"
+                selectedKeys={selectWallet}
+                onSelectionChange={setSelectWallet}
+              >
+                {web3WalletAddresses.map((address) => (
+                  <DropdownItem key={address}>
+                    {address}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -251,6 +302,7 @@ const OrderTable = () => {
       </div>
     );
   }, [
+    selectWallet,
     filterValue,
     statusFilter,
     visibleColumns,
