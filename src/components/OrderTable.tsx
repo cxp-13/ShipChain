@@ -25,7 +25,7 @@ import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { SearchIcon } from "./SearchIcon";
 // import { columns, users, statusOptions } from "@/constants/OrderTableData";
-import { columns, statusOptions } from "@/constants/DataMock"
+import { columns, statusOptions } from "@/constants/OrderTableDataMock"
 import { capitalize } from "@/utils/index";
 import { Order, OrderPopulateMeal } from "@/lib/database/models/order";
 import { Meal } from "@/lib/database/models/meal";

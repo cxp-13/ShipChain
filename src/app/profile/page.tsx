@@ -3,7 +3,7 @@ import React from 'react'
 import ProfileCard from '@/components/ProfileCard';
 import OrderTabs from '@/components/OrderTabs';
 import OrderTable from '@/components/OrderTable';
-import { orders } from '@/constants/DataMock';
+import { orders } from '@/constants/OrderTableDataMock';
 
 const Profile = () => {
   return (

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DisplayOrders } from "@/components";
-import { orders } from "@/constants/DataMock";
+import { orders } from "@/constants/OrderTableDataMock";
 
 export default function Home() {
   return (
