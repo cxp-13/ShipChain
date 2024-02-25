@@ -191,4 +191,4 @@ const statusOptions = [
     { name: "Loading", uid: "loading" },
 ];
 
-export { columns, orders, statusOptions, users, web3WalletAddresses };
+export { columns, orders, statusOptions };

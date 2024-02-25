@@ -25,11 +25,12 @@ import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { SearchIcon } from "./SearchIcon";
 // import { columns, users, statusOptions } from "@/constants/OrderTableData";
-import { columns, orders, statusOptions, users, web3WalletAddresses } from "@/constants/DataMock"
+import { columns, statusOptions } from "@/constants/DataMock"
 import { capitalize } from "@/utils/index";
 import { Order, OrderPopulateMeal } from "@/lib/database/models/order";
 import { Meal } from "@/lib/database/models/meal";
 import { User as UserType } from "@/lib/database/models/user";
+import { removeDuplicateOrders } from "@/utils/index";
 
 // 订单状态
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -40,22 +41,35 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["user", "id", "createAt", "amount", "status"];
 
-// type User = typeof users[0];
+type OrderTableProps = {
+  orders: OrderPopulateMeal[],
+}
 
+const OrderTable = ({ orders }: OrderTableProps) => {
 
-const OrderTable = () => {
+  const addresses = removeDuplicateOrders(orders)
+  console.log("addresses", addresses, "orders", orders);
+
+  // 声明一个过滤值变量，并使用React.useState设置初始值为空字符串
   const [filterValue, setFilterValue] = React.useState("");
+
+  // 声明一个选中的键变量，并使用React.useState设置初始值为一个空的Set
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
 
+  // 声明一个可见的列变量，并使用React.useState设置初始值为一个空的Set
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
 
+  // 声明一个状态过滤变量，并使用React.useState设置初始值为all
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
 
+  // 声明一个选择钱包变量，并使用React.useState设置初始值为all
   const [selectWallet, setSelectWallet] = React.useState<Selection>("all");
 
+  // 声明一个每页行数变量，并使用React.useState设置初始值为5
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "age",
+    column: "createAt",
     direction: "ascending",
   });
 
@@ -84,8 +98,13 @@ const OrderTable = () => {
         Array.from(statusFilter).includes(order.status)
       );
     }
+    console.log("selectWallet", selectWallet);
     // 选择需要展示的钱包
-    filteredOrders = filteredOrders.filter((order) => Array.from(selectWallet).includes(order.owner));
+    if (selectWallet !== "all") {
+      filteredOrders = filteredOrders.filter((order) => Array.from(selectWallet).includes(order.owner));
+    }
+    console.log("filteredOrders", filteredOrders);
+
 
     return filteredOrders;
   }, [orders, filterValue, statusFilter, selectWallet]);
@@ -276,17 +295,18 @@ const OrderTable = () => {
                 selectedKeys={selectWallet}
                 onSelectionChange={setSelectWallet}
               >
-                {web3WalletAddresses.map((address) => (
+                {addresses.map((address) => (
                   <DropdownItem key={address}>
                     {address}
                   </DropdownItem>
                 ))}
+
               </DropdownMenu>
             </Dropdown>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {orders.length} orders</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -308,7 +328,6 @@ const OrderTable = () => {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
     hasSearchFilter,
   ]);
 
@@ -369,7 +388,7 @@ const OrderTable = () => {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No order found"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

@@ -3,6 +3,7 @@ import React from 'react'
 import ProfileCard from '@/components/ProfileCard';
 import OrderTabs from '@/components/OrderTabs';
 import OrderTable from '@/components/OrderTable';
+import { orders } from '@/constants/DataMock';
 
 const Profile = () => {
   return (
@@ -10,7 +11,7 @@ const Profile = () => {
       <div className="flex w-full flex-col gap-20">
         <ProfileCard />
         {/* <OrderTabs /> */}
-        <OrderTable/>
+        <OrderTable orders={orders}/>
       </div>
     </section>
 
