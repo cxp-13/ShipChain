@@ -46,7 +46,6 @@ const PlaceSelect = ({ onSelectPlace }: PlaceSelectProps) => {
     }
 
 
-
     return (
         <div className='flex'>
             <Autocomplete

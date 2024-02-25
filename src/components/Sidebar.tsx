@@ -13,6 +13,7 @@ import { RxPerson } from "react-icons/rx";
 import { RiTakeawayLine } from "react-icons/ri";
 import { RxSun } from "react-icons/rx";
 import { RxQuestionMark } from "react-icons/rx";
+import ThemeController from './ThemeController'
 
 type IconProps = {
     styles?: React.CSSProperties | string;
@@ -48,7 +49,7 @@ const Sidebar = () => {
 
             <div className='flex-1 flex flex-col justify-between items-center rounded-[20px] w-[76px] py-4 mt-12 bg-default-50' >
                 <div className='flex flex-col justify-center items-center gap-3'>
-            
+
                     <div className={`w-[48px] h-[48px] rounded-[10px] ${selectLink === "dashboard" && 'bg-primary'} bg-default flex justify-center items-center `}
                         onClick={() => {
                             setSelectLink('dashboard');
@@ -90,7 +91,7 @@ const Sidebar = () => {
                     </div>
 
                 </div>
-                <div className='p-3 rounded-full flex justify-center items-center drop-shadow-2xl bg-default' onClick={() => {
+                {/* <div className='p-3 rounded-full flex justify-center items-center drop-shadow-2xl bg-default' onClick={() => {
                     if (activeTheme === themes[0]) {
                         console.log(activeTheme);
                         setTheme(themes[1])
@@ -99,7 +100,8 @@ const Sidebar = () => {
                     }
                 }}>
                     <RxSun />
-                </div>
+                </div> */}
+                <ThemeController />
             </div>
         </div >
     )
