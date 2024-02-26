@@ -17,14 +17,14 @@ const StoreOrder = () => {
     const [endPlace, setEndPlace] = useState("")
     const [textAreaValue, setTextAreaValue] = useState("")
     const [mealIds, setMealIds] = useState<string[]>([]);
-    const [isLighting, setIsLighting] = useState<boolean>(false)
+    const [isLighting, setIsLighting] = useState<boolean>(true)
     const [amount, setAmount] = useState<number>(0)
 
 
     return (
         <div className='flex flex-col gap-10'>
             {/* 从商家到用户 */}
-            <div className='font-bold text-4xl text-content1-foreground'>
+            <div className='flex font-bold text-4xl text-content1-foreground'>
                 <h1 className='tracking-widest'>
                     {isLighting ? ("时区增强模式") : ("普通模式")}
                 </h1>
