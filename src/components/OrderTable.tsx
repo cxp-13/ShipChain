@@ -129,48 +129,68 @@ const OrderTable = ({ orders }: OrderTableProps) => {
   }, [sortDescriptor, items]);
   // 每个属性对应渲染的DOM
   const renderCell = React.useCallback((order: OrderPopulateMeal, columnKey: React.Key) => {
-
-
     const cellValue = order[columnKey as keyof OrderPopulateMeal];
-
     switch (columnKey) {
-      case "user":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: order.user.avatar }}
-            description={order.user.email}
-            name={cellValue.name}
-          />
-        );
-      case "meals":
-        return (
-          <div>
-            {cellValue.map((meal) =>
-              <Chip>
-                {meal.name}
-              </Chip>
-            )}
-          </div>
-        );
-      case "id":
-        return (
-          <p className="text-bold text-small">{cellValue}</p>
-        );
-      case "createAt":
-        return (
-          <p className="text-bold text-small">{cellValue}</p>
-        );
-      case "amount":
-        return (
-          <p className="text-bold text-small">{cellValue}</p>
-        );
-      case "status":
-        return (
-          <Chip className="capitalize" color={statusColorMap[cellValue]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
+      case "user": {
+        if (typeof cellValue === "object" && "name" in cellValue && "avatar" in cellValue && "email" in cellValue) {
+          return (
+            <User
+              avatarProps={{ radius: "lg", src: cellValue.avatar }}
+              description={cellValue.email}
+              name={cellValue.name}
+            />
+          );
+        } else {
+          return <p>null</p>
+        }
+      }
+      case "meals": {
+        if (Array.isArray(cellValue)) {
+          return (
+            <div>
+              {cellValue.map((meal) =>
+                <Chip>
+                  {meal.name}
+                </Chip>
+              )}
+            </div>
+          );
+        } else {
+          return <p>null</p>
+        }
+      }
 
-        );
+      case "id": {
+        if (typeof cellValue === "number") {
+          return (
+            <p className="text-bold text-small">{cellValue}</p>
+          );
+        }
+      }
+
+      case "createAt": {
+        if (typeof cellValue === "string") {
+          return (
+            <p className="text-bold text-small">{cellValue}</p>
+          );
+        }
+      }
+      case "amount": {
+        if (typeof cellValue === "number") {
+          return (
+            <p className="text-bold text-small">{cellValue}</p>
+          );
+        }
+      }
+      case "status": {
+        if (typeof cellValue === "string") {
+          return (
+            <Chip className="capitalize" color={statusColorMap[cellValue]} size="sm" variant="flat">
+              {cellValue}
+            </Chip>
+          );
+        }
+      }
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">

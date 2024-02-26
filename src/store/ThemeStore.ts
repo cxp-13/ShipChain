@@ -25,7 +25,7 @@ const useThemeStore = create<themeStore>()(
             partialize: (state) =>
                 Object.fromEntries(
                     Object.entries(state).filter(([key]) => key === "activeTheme")
-                ),
+                )
         }
     )
 );

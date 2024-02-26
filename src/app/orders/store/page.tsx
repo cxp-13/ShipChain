@@ -15,8 +15,9 @@ const StoreOrder = () => {
     return (
         <div>
             {/* 从商家到用户 */}
-            <div className="flex  gap-4">
-                <PlaceSelect onSelectPlace={onSelectPlace} />
+            <div className="flex  gap-4 max-lg:flex-wrap">
+                <PlaceSelect onSelectPlace={onSelectPlace} variant='商家' />
+                <PlaceSelect onSelectPlace={onSelectPlace} variant='目的地' />
             </div>
         </div>
     )

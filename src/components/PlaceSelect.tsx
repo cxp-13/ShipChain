@@ -3,12 +3,15 @@ import React, { Key, useEffect, useState } from 'react';
 import countries, { City, Country, Place, State } from '@/constants/PlaceSelectDataMock';
 import { Autocomplete, AutocompleteItem, Avatar } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
+import { MdOutlineAddBusiness } from "react-icons/md";
+import { MdOutlineAddHome } from "react-icons/md";
 
 interface PlaceSelectProps {
     onSelectPlace: (place: Place) => void;
+    variant: "商家" | "目的地";
 }
 
-const PlaceSelect = ({ onSelectPlace }: PlaceSelectProps) => {
+const PlaceSelect = ({ onSelectPlace, variant }: PlaceSelectProps) => {
     const [selectedCountry, setSelectedCountry] = useState<Country>();
     const [selectedState, setSelectedState] = useState<State>();
     const [selectedCity, setSelectedCity] = useState<City>();
@@ -47,45 +50,56 @@ const PlaceSelect = ({ onSelectPlace }: PlaceSelectProps) => {
 
 
     return (
-        <div className='flex'>
-            <Autocomplete
-                defaultItems={countries || []}
-                className="flex-1"
-                label="Select country"
-                onSelectionChange={handleCountrySelectionChange}
-            >
-                {(country) => (
-                    <AutocompleteItem
-                        key={country.name}
-                        startContent={<Avatar alt={country.name} className="w-6 h-6" src={`https://flagcdn.com/${country.code}.svg`} />}
-                    >
-                        {country.name}
-                    </AutocompleteItem>
-                )}
-            </Autocomplete>
+        <div className='flex flex-col gap-3 w-full p-3 bg-default-600 rounded-3xl shadow-xl'>
 
-            <Autocomplete
-                defaultItems={selectedCountry && selectedCountry.states || []}
-                className="flex-1"
-                label="Select state"
-                onSelectionChange={handleStateSelectionChange}
-            >
-                {(state) => (
-                    <AutocompleteItem key={state.name}>{state.name}</AutocompleteItem>
-                )}
-            </Autocomplete>
+            <div className='flex gap-5 justify-start items-center'>
+                <h1 className='text-content4 font-extrabold text-3xl'>{variant}</h1>
+                {
 
-            <Autocomplete
-                defaultItems={selectedState && selectedState.cities || []}
-                className="flex-1"
-                label="Select city"
-                onSelectionChange={handleCitySelectionChange}
-            >
-                {(city) => (
-                    <AutocompleteItem key={city.name}>{city.name}</AutocompleteItem>
-                )}
-            </Autocomplete>
-            <Input type="text" labelPlacement={"inside"} label="Enter your street" onValueChange={handleStreetChange} className='flex-1' />
+                    variant === "商家" ? <MdOutlineAddBusiness className='size-9' /> : <MdOutlineAddHome className='size-9' />
+                }
+            </div>
+            <div className='flex space-x-4'>
+                <Autocomplete
+                    defaultItems={countries || []}
+                    className="flex-1"
+                    label="Select country"
+                    onSelectionChange={handleCountrySelectionChange}
+                >
+                    {(country) => (
+                        <AutocompleteItem
+                            key={country.name}
+                            startContent={<Avatar alt={country.name} className="w-6 h-6" src={`https://flagcdn.com/${country.code}.svg`} />}
+                        >
+                            {country.name}
+                        </AutocompleteItem>
+                    )}
+                </Autocomplete>
+
+                <Autocomplete
+                    defaultItems={selectedCountry && selectedCountry.states || []}
+                    className="flex-1"
+                    label="Select state"
+                    onSelectionChange={handleStateSelectionChange}
+                >
+                    {(state) => (
+                        <AutocompleteItem key={state.name}>{state.name}</AutocompleteItem>
+                    )}
+                </Autocomplete>
+
+                <Autocomplete
+                    defaultItems={selectedState && selectedState.cities || []}
+                    className="flex-1"
+                    label="Select city"
+                    onSelectionChange={handleCitySelectionChange}
+                >
+                    {(city) => (
+                        <AutocompleteItem key={city.name}>{city.name}</AutocompleteItem>
+                    )}
+                </Autocomplete>
+                <Input type="text" labelPlacement={"inside"} label="Enter your street" onValueChange={handleStreetChange} className='flex-1' />
+            </div>
+
         </div>
     );
 };
