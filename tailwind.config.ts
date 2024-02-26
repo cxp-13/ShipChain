@@ -11,20 +11,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // textColor: {
-      //   primary: "rgb(var(--color-primary) / <alpha-value>)",
-      //   secondary: "rgb(var(--color-secondary) / <alpha-value>)",
-      //   background: "rgb(var(--color-background) / <alpha-value>)",
-      //   foreground: "rgb(var(--color-foreground) / <alpha-value>)",
-      //   separator: "rgb(var(--color-separator) / <alpha-value>)",
-      // },
-      // backgroundColor: {
-      //   primary: "rgb(var(--color-primary) / <alpha-value>)",
-      //   secondary: "rgb(var(--color-secondary) / <alpha-value>)",
-      //   background: "rgb(var(--color-background) / <alpha-value>)",
-      //   foreground: "rgb(var(--color-foreground) / <alpha-value>)",
-      //   separator: "rgb(var(--color-separator) / <alpha-value>)",
-      // },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -33,9 +19,8 @@ const config: Config = {
     },
   },
   plugins: [nextui(), require("daisyui")],
-  // daisyUI config (optional - here are the default values)
   daisyui: {
-    prefix: "daisy-", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+    prefix: "daisy-"
   },
 };
 export default config;

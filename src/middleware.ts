@@ -6,9 +6,10 @@ export default authMiddleware({
         '/',
         '/orders/:userId/:orderId',
         '/question',
-        '/rocket'
+        '/rocket',
+        '/api/uploadthing'
     ],
-    ignoredRoutes: []
+    ignoredRoutes: ['/api/uploadthing']
 });
 
 // export default authMiddleware({});

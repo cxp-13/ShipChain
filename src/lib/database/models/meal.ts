@@ -1,7 +1,7 @@
 import { Document, Schema, model, models, InferSchemaType } from "mongoose";
 
 // 1. Create an interface representing a document in MongoDB.
-// interface IMeal {
+// export interface Meal {
 //   name: string;
 //   quantity: number;
 //   price: number;
@@ -18,5 +18,5 @@ const mealSchema = new Schema({
 
 export type Meal = InferSchemaType<typeof mealSchema>;
 // 3. Create a Model.
-export const MealModel = model('Meal', mealSchema);
+export const MealModel = models.Meal || model('Meal', mealSchema);
 

@@ -7,25 +7,26 @@ import { MdOutlineAddBusiness } from "react-icons/md";
 import { MdOutlineAddHome } from "react-icons/md";
 
 interface PlaceSelectProps {
-    onSelectPlace: (place: Place) => void;
+    onSelectPlaceChange: (place: string) => void;
     variant: "商家" | "目的地";
 }
 
-const PlaceSelect = ({ onSelectPlace, variant }: PlaceSelectProps) => {
+const PlaceSelect = ({ onSelectPlaceChange, variant }: PlaceSelectProps) => {
     const [selectedCountry, setSelectedCountry] = useState<Country>();
     const [selectedState, setSelectedState] = useState<State>();
     const [selectedCity, setSelectedCity] = useState<City>();
     const [street, setStreet] = useState("");
 
     useEffect(() => {
-        const place: Place = {
-            country: selectedCountry?.name || '',
-            state: selectedState?.name || '',
-            city: selectedCity?.name || '',
-            street: street
-        };
-        onSelectPlace(place);
-    }, [selectedCountry, selectedState, selectedCity, street, onSelectPlace]);
+        // const place: Place = {
+        //     country: selectedCountry?.name || '',
+        //     state: selectedState?.name || '',
+        //     city: selectedCity?.name || '',
+        //     street: street
+        // };
+        const placeString = `${selectedCountry?.name || ''}/${selectedState?.name || ''}/${selectedCity?.name || ''}/${street}`;
+        onSelectPlaceChange(placeString);
+    }, [selectedCountry, selectedState, selectedCity, street]);
 
 
     const handleCountrySelectionChange = (country: Key) => {
