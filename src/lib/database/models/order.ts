@@ -1,15 +1,17 @@
+import { BigNumber } from "ethers";
 import { Meal } from "./meal";
 import { User } from "./user";
+// 订单表单对象
 export type Order = {
-  owner: string;
   id: string;
-  createAt: number;
+  createAt: BigNumber;
   startPoint: string;
   endPoint: string;
-  amount: number;
+  amount: BigNumber;
   mealIds: string[];
   userId: string;
   note: string;
+  isSuper: boolean;
 };
 
 export type OrderPopulateMeal = {

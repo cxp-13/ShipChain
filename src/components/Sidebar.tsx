@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { logo, sun } from '../../public/assets'
 import { navlinks } from '../constants/NavLinks'
 import Image from 'next/image'
-import useThemeStore from "@/store/ThemeStore";
+import useThemeStore from "@/store/themeStore";
 import { RxDashboard } from "react-icons/rx";
 import { RxPlusCircled } from "react-icons/rx";
 import { RxRocket } from "react-icons/rx";

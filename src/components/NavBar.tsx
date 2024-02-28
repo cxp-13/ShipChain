@@ -9,7 +9,7 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import { Button } from '@nextui-org/button';
 import { Input } from "@nextui-org/react";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import useThemeStore from "@/store/ThemeStore";
+import useThemeStore from "@/store/themeStore";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxDashboard } from "react-icons/rx";
 import { RxPlusCircled } from "react-icons/rx";
@@ -84,7 +84,7 @@ const NavBar = () => {
             </button>
           </SignInWithMetamaskButton>
         </div> */}
-        {/* <ConnectWallet /> */}
+        <ConnectWallet />
         {/* 如果当前已登录 */}
         <SignedIn>
           <UserButton />

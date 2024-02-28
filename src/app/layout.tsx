@@ -9,9 +9,11 @@ import {
   coinbaseWallet,
   walletConnect,
 } from "@thirdweb-dev/react";
-import useThemeStore from "@/store/ThemeStore";
+import useThemeStore from "@/store/themeStore";
 import { Providers } from "./providers";
 import { ClerkProvider } from '@clerk/nextjs'
+import { StateContextProvider } from "@/context"
+import { Sepolia, Localhost } from "@thirdweb-dev/chains";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -31,10 +33,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${activeTheme} `}>
-        {/* <body className={`theme-${activeTheme}`}> */}
         <body className="bg-background">
           <Providers>
-            <ThirdwebProvider
+            <ThirdwebProvider activeChain={Localhost} supportedChains={[Sepolia]}
               supportedWallets={[
                 metamaskWallet({
                   recommended: true,
@@ -42,17 +43,21 @@ export default function RootLayout({
                 coinbaseWallet(),
                 walletConnect(),
               ]}
-              clientId="<your_client_id>"
+              clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}
             >
-              <div className="relative sm:-8 p-4 min-h-screen flex flex-row">
-                <div className="sm:flex hidden mr-10 relative">
-                  <Sidebar />
+              <StateContextProvider>
+
+                <div className="relative sm:-8 p-4 min-h-screen flex flex-row">
+                  <div className="sm:flex hidden mr-10 relative">
+                    <Sidebar />
+                  </div>
+                  <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
+                    <Navbar />
+                    {children}
+                  </div>
                 </div>
-                <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pr-5">
-                  <Navbar />
-                  {children}
-                </div>
-              </div>
+              </StateContextProvider>
+
             </ThirdwebProvider>
           </Providers>
         </body>

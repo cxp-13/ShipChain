@@ -1,5 +1,5 @@
 import React from 'react'
-import useThemeStore from "@/store/ThemeStore";
+import useThemeStore from "@/store/themeStore";
 import { RxSun } from "react-icons/rx";
 import { RxMoon } from "react-icons/rx";
 

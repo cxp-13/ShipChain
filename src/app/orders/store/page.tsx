@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Input } from "@nextui-org/react";
 import { MdOutlineAddBusiness } from "react-icons/md";
 import { MdOutlineHouse } from "react-icons/md";
@@ -11,14 +11,61 @@ import { Button } from "@nextui-org/react";
 import { MdFileDownloadDone } from "react-icons/md";
 import { FaBoltLightning } from "react-icons/fa6";
 import { MdOutlineGeneratingTokens } from "react-icons/md";
+import { useUser } from '@clerk/nextjs';
+import { v4 as uuidv4 } from 'uuid';
+import { ethers } from 'ethers';
+import StateContext from '@/context';
 
 const StoreOrder = () => {
-    const [startPlace, setStartPlace] = useState("")
-    const [endPlace, setEndPlace] = useState("")
-    const [textAreaValue, setTextAreaValue] = useState("")
+    const { isSignedIn, user, isLoaded } = useUser();
+    const { publishOrder, storeOrderIsLoading, errorMsg } = useContext(StateContext);
+    const [startPoint, setStartPoint] = useState("")
+    const [endPoint, setEndPoint] = useState("")
+    const [note, setNote] = useState("")
     const [mealIds, setMealIds] = useState<string[]>([]);
-    const [isLighting, setIsLighting] = useState<boolean>(true)
+    const [isSuper, setIsSuper] = useState<boolean>(false)
     const [amount, setAmount] = useState<number>(0)
+    const [isDisabled, setIsDisabled] = useState<boolean>(false)
+
+
+    useEffect(() => {
+        // 在这里实时监测参数的变化并更新 isDisabled 状态
+        if (user && startPoint && endPoint && note && mealIds.length > 0 && amount > 0) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [user, startPoint, endPoint, note, mealIds, amount]);
+
+    const handleSubmit = async () => {
+        let userId = user?.id;
+        let orderId = uuidv4();
+        let currentTimestamp = Math.ceil(Date.now() / 1000);
+        let createAt = ethers.BigNumber.from(currentTimestamp);
+        let amountPrice = ethers.BigNumber.from(amount);
+
+        console.log("startPoint", startPoint, "endPoint", endPoint, "note", note, "isSuper", isSuper);
+        console.log("userId", userId, "id", orderId, "createAt", createAt, "amount", amount);
+        console.log("mealIds", mealIds);
+
+        try {
+            if (userId) {
+                publishOrder({
+                    id: orderId,
+                    createAt,
+                    startPoint,
+                    endPoint,
+                    amount: amountPrice,
+                    mealIds,
+                    userId,
+                    note,
+                    isSuper
+                })
+            }
+        } catch (error) {
+            console.log("storeOrder", error);
+        }
+    }
 
 
     return (
@@ -26,15 +73,15 @@ const StoreOrder = () => {
             {/* 从商家到用户 */}
             <div className='flex font-bold text-4xl text-content1-foreground'>
                 <h1 className='tracking-widest'>
-                    {isLighting ? ("时区增强模式") : ("普通模式")}
+                    {isSuper ? ("时区增强模式") : ("普通模式")}
                 </h1>
                 {
-                    isLighting && <FaBoltLightning />
+                    isSuper && <FaBoltLightning />
                 }
             </div>
             <div className="flex  gap-4 max-lg:flex-wrap">
-                <PlaceSelect onSelectPlaceChange={(place) => setStartPlace(place)} variant='商家' />
-                <PlaceSelect onSelectPlaceChange={(place) => setEndPlace(place)} variant='目的地' />
+                <PlaceSelect onSelectPlaceChange={(place) => setStartPoint(place)} variant='商家' />
+                <PlaceSelect onSelectPlaceChange={(place) => setEndPoint(place)} variant='目的地' />
             </div>
             {/* 图片选择 */}
             <div>
@@ -45,13 +92,25 @@ const StoreOrder = () => {
                     label="Description"
                     placeholder="Enter your description"
                     className="w-full"
-                    onValueChange={(text) => setTextAreaValue(text)}
+                    onValueChange={(text) => setNote(text)}
                 />
             </div>
-
-            <Button color="success" endContent={<MdOutlineGeneratingTokens size={34} />} size={"lg"} className='h-full px-6 py-3'>
-                <p>{`Mint ${amount*0.01} token`}</p>
-            </Button>
+            {
+                errorMsg ? (
+                    <div role="alert" className="daisy-alert daisy-alert-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div>
+                            <h3 className="font-bold">Publish error!</h3>
+                            <div className="text-xs">{errorMsg}</div>
+                        </div>
+                        <button className="btn btn-sm">retry</button>
+                    </div>
+                ) : (
+                    <Button isDisabled={isDisabled} isLoading={storeOrderIsLoading} color="success" endContent={<MdOutlineGeneratingTokens size={34} />} size={"lg"} className='h-full px-6 py-3' onPress={handleSubmit}>
+                        <p>{`Mint ${amount * 0.01} token`}</p>
+                    </Button>
+                )
+            }
         </div>
     )
 }

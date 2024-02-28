@@ -15,5 +15,16 @@ function removeDuplicateOrders(orders: OrderPopulateMeal[]) {
     return Array.from(uniqueOwners);
 }
 
+function getErrorArgs(errorMessage: string): string | null {
+    const regex = /errorArgs=\["(.*?)"\]/;
+    const match = errorMessage.match(regex);
+    if (match && match.length > 1) {
+        return match[1];
+    } else {
+        return null;
+    }
+}
 
-export { capitalize, removeDuplicateOrders }
+
+
+export { capitalize, removeDuplicateOrders, getErrorArgs }

@@ -49,8 +49,11 @@ const DishGallery = ({ onGetMealIds, onGetAmount }: { onGetMealIds: (mealIds: st
                 console.log("onClientUploadComplete", res);
                 console.log("uploaded successfully!");
             },
-            onUploadError: () => {
+            onUploadError: (e) => {
+
                 console.log("error occurred while uploading");
+                console.log(e);
+
             },
             onUploadBegin: () => {
                 console.log("upload has begun");
@@ -74,22 +77,30 @@ const DishGallery = ({ onGetMealIds, onGetAmount }: { onGetMealIds: (mealIds: st
             name: name,
             quantity: quantity,
             price: price,
-            image: curImageUrl
+            image: "loading"
         }
         setMeals([...meals, newMeal]);
+
         let filesResponse = await startUpload(files);
         console.log("filesResponse", filesResponse);
-        if (filesResponse && name && quantity && price) {
-            let newMeal = await createMeal({
+
+        if (filesResponse !== undefined) {
+            let createdMeal = await createMeal({
                 name,
                 quantity,
                 price,
                 image: filesResponse[0].url,
             })
-            setMealIds([...mealIds, newMeal._id]);
-            console.log("newMeal", newMeal);
+            setMeals((meals) =>
+                meals.map(meal =>
+                    meal.name === newMeal.name ? createdMeal : meal
+                )
+            );
+            setMealIds([...mealIds, createdMeal._id]);
+            console.log("createdMeal", createdMeal);
         } else {
-            console.log("请填写完整信息")
+            // 上传失败时移除之前添加的newMeal
+            setMeals(meals.filter(meal => meal.name !== newMeal.name));
         }
     }
 

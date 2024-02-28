@@ -20,7 +20,6 @@ export const createMeal = async ({ name, quantity, price, image }: Meal) => {
     });
     console.log("newMeal", newMeal);
     
-
     return JSON.parse(JSON.stringify(newMeal));
   } catch (error) {
     console.log(error);
