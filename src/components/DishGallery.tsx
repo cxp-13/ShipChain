@@ -96,6 +96,7 @@ const DishGallery = ({ onGetMealIds, onGetAmount }: { onGetMealIds: (mealIds: st
                     meal.name === newMeal.name ? createdMeal : meal
                 )
             );
+            
             setMealIds([...mealIds, createdMeal._id]);
             console.log("createdMeal", createdMeal);
         } else {

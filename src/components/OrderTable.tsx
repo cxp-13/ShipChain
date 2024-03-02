@@ -27,7 +27,7 @@ import { SearchIcon } from "./SearchIcon";
 // import { columns, users, statusOptions } from "@/constants/OrderTableData";
 import { columns, statusOptions } from "@/constants/OrderTableDataMock"
 import { capitalize } from "@/utils/index";
-import { Order, OrderPopulateMeal } from "@/lib/database/models/order";
+import { Order, OrderPopulateMealAndUser } from "@/lib/database/models/order";
 import { Meal } from "@/lib/database/models/meal";
 import { User as UserType } from "@/lib/database/models/user";
 import { removeDuplicateOrders } from "@/utils/index";
@@ -42,7 +42,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const INITIAL_VISIBLE_COLUMNS = ["user", "id", "createAt", "amount", "status"];
 
 type OrderTableProps = {
-  orders: OrderPopulateMeal[],
+  orders: OrderPopulateMealAndUser[],
 }
 
 const OrderTable = ({ orders }: OrderTableProps) => {
@@ -119,17 +119,17 @@ const OrderTable = ({ orders }: OrderTableProps) => {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: OrderPopulateMeal, b: OrderPopulateMeal) => {
-      const first = a[sortDescriptor.column as keyof OrderPopulateMeal] as number;
-      const second = b[sortDescriptor.column as keyof OrderPopulateMeal] as number;
+    return [...items].sort((a: OrderPopulateMealAndUser, b: OrderPopulateMealAndUser) => {
+      const first = a[sortDescriptor.column as keyof OrderPopulateMealAndUser] as number;
+      const second = b[sortDescriptor.column as keyof OrderPopulateMealAndUser] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
   // 每个属性对应渲染的DOM
-  const renderCell = React.useCallback((order: OrderPopulateMeal, columnKey: React.Key) => {
-    const cellValue = order[columnKey as keyof OrderPopulateMeal];
+  const renderCell = React.useCallback((order: OrderPopulateMealAndUser, columnKey: React.Key) => {
+    const cellValue = order[columnKey as keyof OrderPopulateMealAndUser];
     switch (columnKey) {
       case "user": {
         if (typeof cellValue === "object" && "name" in cellValue && "avatar" in cellValue && "email" in cellValue) {

@@ -1,10 +1,10 @@
-import { OrderPopulateMeal } from "@/lib/database/models/order";
+import { OrderPopulateMealAndUser } from "@/lib/database/models/order";
 
 function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 // 根据 owner 属性去重 orders 数组
-function removeDuplicateOrders(orders: OrderPopulateMeal[]) {
+function removeDuplicateOrders(orders: OrderPopulateMealAndUser[]) {
     const uniqueOwners = new Set();
 
     orders.forEach(order => {

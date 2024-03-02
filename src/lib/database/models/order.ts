@@ -14,7 +14,7 @@ export type Order = {
   isSuper: boolean;
 };
 
-export type OrderPopulateMeal = {
+export type OrderPopulateMealAndUser = {
   owner: string;
   id: string;
   createAt: number;

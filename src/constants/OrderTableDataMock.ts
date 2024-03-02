@@ -1,5 +1,5 @@
 import { Meal } from "@/lib/database/models/meal";
-import { Order, OrderPopulateMeal } from "@/lib/database/models/order";
+import { Order, OrderPopulateMealAndUser } from "@/lib/database/models/order";
 import { User } from "@/lib/database/models/user";
 
 // 模拟的 Meal 对象数组
@@ -55,7 +55,7 @@ const web3WalletAddresses = [
 
 
 // 生成模拟数据的 OrderPopulateMeal 对象数组
-const orders: OrderPopulateMeal[] = [
+const orders: OrderPopulateMealAndUser[] = [
     {
         owner: web3WalletAddresses[0], // Web3 钱包地址示例
         id: "1",
@@ -119,7 +119,7 @@ const orders: OrderPopulateMeal[] = [
 ];
 
 // 新订单对象
-const additionalOrders: OrderPopulateMeal[] = [
+const additionalOrders: OrderPopulateMealAndUser[] = [
     {
         owner: web3WalletAddresses[1], // 示例 Web3 钱包地址
         id: "6",

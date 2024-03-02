@@ -2,14 +2,14 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import OrderCard from './OrderCard'
-import { OrderPopulateMeal } from '@/lib/database/models/order'
-const DisplayOrders = ({ orders }: { orders: OrderPopulateMeal[] }) => {
+import { OrderPopulateMealAndUser } from '@/lib/database/models/order'
+const DisplayOrders = ({ orders }: { orders: OrderPopulateMealAndUser[] }) => {
 
     const router = useRouter()
     const userId = 0
 
     // 传递参数：orderId + userId(clerk提供) 
-    const handleNavigate = (order: OrderPopulateMeal) => {
+    const handleNavigate = (order: OrderPopulateMealAndUser) => {
         router.push(`/orders/${order.id}/userId=${userId}`)
     }
 

@@ -35,7 +35,7 @@ export default function RootLayout({
       <html lang="en" className={`${activeTheme} `}>
         <body className="bg-background">
           <Providers>
-            <ThirdwebProvider activeChain={Localhost} supportedChains={[Sepolia]}
+            <ThirdwebProvider activeChain={Sepolia} supportedChains={[Sepolia, Localhost]}
               supportedWallets={[
                 metamaskWallet({
                   recommended: true,

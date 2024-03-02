@@ -1,9 +1,9 @@
-import { OrderPopulateMeal } from '@/lib/database/models/order'
+import { OrderPopulateMealAndUser } from '@/lib/database/models/order'
 import React from 'react'
 // import Image from 'next/image'
 import { Card, CardFooter, Image, Button, CardHeader } from "@nextui-org/react";
 
-const OrderCard = ({ order, handleClick }: { order: OrderPopulateMeal, handleClick: () => void }) => {
+const OrderCard = ({ order, handleClick }: { order: OrderPopulateMealAndUser, handleClick: () => void }) => {
     // 根据备注生成图片
     const imageUrl = "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
     const userUrl = "https://images.pexels.com/photos/20267706/pexels-photo-20267706.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
